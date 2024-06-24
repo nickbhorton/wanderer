@@ -1,0 +1,6 @@
+port 8080
+mount /home/nick/dev/wanderer/website/
+index src/index.html
+ext html text/html
+ext css text/css
+location get /output.css build/output.css
