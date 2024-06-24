@@ -4,3 +4,4 @@
 website/node_modules
 build/
 ext/cpp
+compile_commands.json
