@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 
+#include "fit.hpp"
 #include "fit_decode.hpp"
 #include "fit_mesg_broadcaster.hpp"
 
@@ -16,27 +17,23 @@ double semicircles_to_degrees(int32_t val)
 class CoordsListener : public fit::RecordMesgListener
 {
 public:
+    std::vector<std::tuple<FIT_SINT32, FIT_SINT32, FIT_FLOAT32>> positions;
+    int unreadable{};
     void OnMesg(fit::RecordMesg& mesg) override
     {
-        if (mesg.IsPositionLatValid()) {
-            std::cout << mesg.GetPositionLat() << " ";
+        if (mesg.IsPositionLatValid() && mesg.IsPositionLongValid() &&
+            (mesg.IsAltitudeValid() || mesg.IsEnhancedAltitudeValid())) {
+            positions.push_back(std::tuple<FIT_SINT32, FIT_SINT32, FIT_FLOAT32>(
+                {mesg.GetPositionLat(),
+                 mesg.GetPositionLong(),
+                 mesg.IsAltitudeValid() ? mesg.GetAltitude()
+                                        : mesg.GetEnhancedAltitude()}
+            ));
+
         } else {
-            std::cout << "null ";
+            unreadable++;
         }
-        if (mesg.IsPositionLongValid()) {
-            std::cout << mesg.GetPositionLong() << " ";
-        } else {
-            std::cout << "null ";
-        }
-        if (mesg.IsAltitudeValid()) {
-            std::cout << mesg.GetAltitude() << " ";
-        } else if (mesg.IsEnhancedAltitudeValid()) {
-            std::cout << mesg.GetEnhancedAltitude() << " ";
-        } else {
-            std::cout << "null ";
-        }
-        std::cout << "\n";
-    }
+    };
 };
 
 int main(int argc, char* argv[])
@@ -45,33 +42,45 @@ int main(int argc, char* argv[])
     fit::MesgBroadcaster mesgBroadcaster;
     CoordsListener coords_listener;
     DefaultDeveloperFieldDescriptionListener dev_listener;
-    std::fstream file;
+    std::fstream ifile;
+    std::fstream ofile;
 
-    if (argc != 2) {
-        printf("Usage: fit_types <filename>\n");
+    if (argc != 3) {
+        std::cerr << "Usage: fit_coords <input_filename> <output_filename>\n";
         return -1;
     }
 
-    file.open(argv[1], std::ios::in | std::ios::binary);
-
-    if (!file.is_open()) {
-        printf("Error opening file %s\n", argv[1]);
-        return -1;
+    ifile.open(argv[1], std::ios::in | std::ios::binary);
+    if (!ifile.is_open()) {
+        std::cerr << "Error opening file " << argv[1] << "\n";
+        std::exit(1);
+    }
+    ofile.open(argv[2], std::ios::out | std::ios::binary);
+    if (!ofile.is_open()) {
+        std::cerr << "Error opening file " << argv[2] << "\n";
+        std::exit(1);
     }
 
-    if (!decode.CheckIntegrity(file)) {
-        printf("FIT file integrity failed.\nAttempting to decode...\n");
+    if (!decode.CheckIntegrity(ifile)) {
+        std::cerr << "FIT file integrity failed.\nAttempting to decode...\n";
     }
 
     mesgBroadcaster.AddListener((fit::RecordMesgListener&)coords_listener);
 
     try {
-        decode.Read(&file, &mesgBroadcaster, &mesgBroadcaster, &dev_listener);
+        decode.Read(&ifile, &mesgBroadcaster, &mesgBroadcaster, &dev_listener);
     } catch (const fit::RuntimeException& e) {
         std::cerr << "Exception decoding file: %s\n" << e.what() << "\n";
         std::exit(1);
     } catch (...) {
         std::cerr << "Exception decoding file\n";
         std::exit(1);
+    }
+    std::cout << coords_listener.positions.size() << " / "
+              << coords_listener.unreadable << "\n";
+    for (auto const& [lat, longi, alt] : coords_listener.positions) {
+        ofile.write((const char*)&lat, sizeof(lat));
+        ofile.write((const char*)&longi, sizeof(longi));
+        ofile.write((const char*)&alt, sizeof(alt));
     }
 }

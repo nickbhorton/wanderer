@@ -1,9 +1,10 @@
-#include "fit_decode.hpp"
-#include "fit_mesg_broadcaster.hpp"
 #include <cstdint>
 #include <fstream>
 #include <iostream>
 #include <tuple>
+
+#include "fit_decode.hpp"
+#include "fit_mesg_broadcaster.hpp"
 
 #include "fit_defaults.h"
 
@@ -17,7 +18,6 @@ class TypeNameListener : public fit::MesgListener
 {
 public:
     std::vector<std::tuple<std::string, int>> mesg_name_count{};
-
     void OnMesg(fit::Mesg& mesg) override
     {
         bool found{false};

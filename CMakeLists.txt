@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.29)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED On)
+set(CMAKE_CXX_FLAGS "-O3 -Wall -Wextra")
 
 project(
     wanderer
@@ -11,6 +12,7 @@ add_library(
     udp_server 
     lib/udp_server.cc
 )
+
 
 add_library(
     garmin_sdk
