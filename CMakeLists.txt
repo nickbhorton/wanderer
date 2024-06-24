@@ -54,16 +54,46 @@ target_link_libraries(
     garmin_sdk
 )
 
-add_executable(
-    fit_mesg_types
-    src/fit_mesg_types.cc
+add_library(
+    fit_utils
+    src/fit_defaults.cc
 )
 target_include_directories(
-    fit_mesg_types
+    fit_utils
     PUBLIC
     ${CMAKE_SOURCE_DIR}/ext/cpp
 )
 target_link_libraries(
-    fit_mesg_types
+    fit_utils
+    garmin_sdk
+)
+
+add_executable(
+    fit_types
+    src/fit_types.cc
+)
+target_include_directories(
+    fit_types
+    PUBLIC
+    ${CMAKE_SOURCE_DIR}/ext/cpp
+)
+target_link_libraries(
+    fit_types
+    fit_utils
+    garmin_sdk
+)
+
+add_executable(
+    fit_coords
+    src/fit_coords.cc
+)
+target_include_directories(
+    fit_coords
+    PUBLIC
+    ${CMAKE_SOURCE_DIR}/ext/cpp
+)
+target_link_libraries(
+    fit_coords
+    fit_utils
     garmin_sdk
 )
