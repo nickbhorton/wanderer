@@ -1,5 +1,6 @@
 port 8080
 mount /home/nick/dev/wanderer/website/
+data /home/nick/dev/wanderer/build/data/
 index src/index.html
 ext html text/html
 ext css text/css

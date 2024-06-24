@@ -9,5 +9,14 @@
     <link href="output.css" rel="stylesheet">
     <title>Wanderer</title>
 </head>
-<h1>Wanderer</h1>
+
+<body>
+    <h1>Wanderer</h1>
+    <form action="/fit/upload" method="post" enctype="multipart/form-data" class="flex flex-col items-center">
+        <label for="file">Fit File</label>
+        <input id="file" type="file" name="file" />
+        <button>Upload</button>
+    </form>
+</body>
+
 </html>
