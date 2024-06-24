@@ -1,0 +1,3 @@
+None of these files are on github but are required for the project
+
+1. The garmin cpp SDK files are here in a folder called /cpp and used in CMakeList.txt

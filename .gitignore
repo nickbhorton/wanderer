@@ -1,3 +1,6 @@
+.cache
 .clangd
 .clang-format
 website/node_modules
+build/
+ext/cpp
