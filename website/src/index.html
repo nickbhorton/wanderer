@@ -11,11 +11,9 @@
 </head>
 
 <body>
-    <h1>Wanderer</h1>
-    <form action="/fit/upload" method="post" enctype="multipart/form-data" class="flex flex-col items-center">
-        <label for="file">Fit File</label>
-        <input id="file" type="file" name="file" />
-        <button>Upload</button>
+    <form action="/profile" method="get">
+        <input name="firstname" type="text" hx-post="/profile">
+        <button type="submit">Go</button>
     </form>
 </body>
 

@@ -99,3 +99,13 @@ target_link_libraries(
     fit_utils
     garmin_sdk
 )
+
+# SERVERS
+add_executable(
+    profile_server
+    servers/profile.cc
+)
+target_link_libraries(
+    profile_server
+    meadow_server_utils
+)

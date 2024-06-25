@@ -5,3 +5,4 @@ index src/index.html
 ext html text/html
 ext css text/css
 location get /output.css build/output.css
+endpoint /profile get 127.0.0.1 50000
