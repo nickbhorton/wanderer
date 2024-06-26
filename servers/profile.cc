@@ -1,6 +1,11 @@
 #include <cctype>
 #include <meadow_server.h>
+#include <sqlite3.h>
 #include <sstream>
+#include <string>
+#include <variant>
+
+#include "sql.h"
 
 // server funcs
 auto not_found(TcpServer& server)
@@ -49,9 +54,11 @@ auto process_query(std::string const& query)
     -> std::optional<std::tuple<std::string, std::string, int>>
 {
     std::vector<std::string> fields{split_on(query, '&')};
+    /*
     for (auto const& f : fields) {
         std::cout << f << "\n";
     }
+    */
     if (fields.size() < 3) {
         return {};
     }
@@ -82,10 +89,12 @@ auto process_query(std::string const& query)
     return {{firstname, lastname, id}};
 }
 
+std::string const db_path{"/home/nick/dev/wanderer/build/data/wanderer.db"};
+
 int main()
 {
+    SqlDatabase db(db_path);
     TcpServer server("127.0.0.1", 50000);
-
     while (true) {
         server.find_connection(5);
         if (server.is_valid()) {
@@ -95,8 +104,47 @@ int main()
                 not_found(server);
                 continue;
             }
-            auto const& [firstname, lastname, id] = opt.value(); 
-            server.write_serialized_string_connection(p(firstname + " " + lastname));
+            auto const& [firstname, lastname, name_id] = opt.value();
+            std::string sql_query =
+                "SELECT id FROM profiles WHERE firstname='" + firstname +
+                "' AND lastname='" + lastname + "' AND name_id='" +
+                std::to_string(name_id) + "';";
+            std::cout << sql_query << "\n";
+            auto sql_result = db.query(sql_query);
+            if (std::holds_alternative<std::string>(sql_result)) {
+                std::stringstream ss{};
+                ss << std::get<std::string>(sql_result) << "\n";
+                server.write_serialized_string_connection(ss.str());
+                continue;
+            } else {
+                auto vec = std::get<std::vector<std::vector<sqlite_result_t>>>(
+                    sql_result
+                );
+                if (vec.size() && vec[0].size() && vec[0][0].has_value() &&
+                    std::holds_alternative<int>(vec[0][0].value())) {
+                    int profile_id = std::get<int>(vec[0][0].value());
+                    std::string sql_query =
+                        "SELECT * FROM ultras WHERE profile_id='" +
+                        std::to_string(profile_id) + "';";
+                    std::cout << sql_query << "\n";
+                    auto sql_result = db.query(sql_query);
+                    std::stringstream ss{};
+                    if (std::holds_alternative<std::string>(sql_result)) {
+                        ss << std::get<std::string>(sql_result) << "\n";
+                        server.write_serialized_string_connection(ss.str());
+                    } else {
+                        ss << std::get<
+                                  std::vector<std::vector<sqlite_result_t>>>(
+                                  sql_result
+                              )
+                           << "\n";
+                        server.write_serialized_string_connection(ss.str());
+                    }
+                } else {
+                    server.write_serialized_string_connection("no ultras found"
+                    );
+                }
+            }
         }
     }
 }

@@ -9,12 +9,6 @@ project(
 )
 
 add_library(
-    udp_server 
-    lib/udp_server.cc
-)
-
-
-add_library(
     garmin_sdk
     ext/cpp/fit_accumulated_field.cpp
     ext/cpp/fit_accumulator.cpp
@@ -100,6 +94,15 @@ target_link_libraries(
     garmin_sdk
 )
 
+add_library(
+    sqlite_cpp
+    src/sql.cc
+)
+target_link_libraries(
+    sqlite_cpp
+    sqlite3
+)
+
 # SERVERS
 add_executable(
     profile_server
@@ -108,4 +111,10 @@ add_executable(
 target_link_libraries(
     profile_server
     meadow_server_utils
+    sqlite_cpp
+)
+target_include_directories(
+    profile_server
+    PUBLIC
+    ${CMAKE_SOURCE_DIR}/src
 )
