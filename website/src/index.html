@@ -10,11 +10,18 @@
     <title>Wanderer</title>
 </head>
 
-<body>
-    <form action="/profile" method="get">
-        <input name="firstname" type="text" hx-post="/profile">
-        <button type="submit">Go</button>
-    </form>
+<body class="bg-white text-slate-800 min-h-screen font-sans">
+    <div class="flex justify-center items-center min-h-screen text-lg">
+        <form action="/profile" method="get" class="flex flex-col p-4 rounded-lg">
+            <label class="p-1 m-1 text-center font-bold text-2xl tracking-wider">Search Athletes</label>
+            <input placeholder="First Name" name="firstname" type="text"
+                class="border border-slate-300 rounded-lg m-1 p-1">
+            <input placeholder="Last Name" name="lastname" type="text"
+                class="border border-slate-300 rounded-lg m-1 p-1">
+            <input placeholder="Id" name="number" type="number" class="border border-slate-300 rounded-lg m-1 p-1">
+            <button type="submit" class="border border-slate-300 m-1 font-bold rounded-lg p-1 tracking-wider">Find</button>
+        </form>
+    </div>
 </body>
 
 </html>
