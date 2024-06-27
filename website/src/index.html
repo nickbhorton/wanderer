@@ -11,21 +11,43 @@
 </head>
 
 <body class="bg-white text-slate-800 min-h-screen font-sans">
-    <a href="example_ultra.html">Example Ultra</a>
-    <div class="flex justify-center items-center min-h-screen text-lg">
-        <form action="/profile" method="get" class="flex flex-col p-4 rounded-lg">
-            <label class="p-1 m-1 text-center font-bold text-2xl tracking-wider">Search Athletes</label>
-            <input placeholder="First Name" name="firstname" type="text"
-                class="border border-slate-300 rounded-lg m-1 p-1">
-            <input placeholder="Last Name" name="lastname" type="text"
-                class="border border-slate-300 rounded-lg m-1 p-1">
-            <input placeholder="Id" name="number" type="number" class="border border-slate-300 rounded-lg m-1 p-1">
-            <button type="submit"
-                class="border border-slate-300 m-1 font-bold rounded-lg p-1 tracking-wider">Find</button>
-        </form>
+    <div class="flex justify-center items-center min-w-screen h-16  border-b">
+        <h1 class="text-2xl font-black mx-3">Wanderer</h1>
+        <div class="relative text-normal hover:text-sky-500 border-b border-x border-x-white border-b-slate-200 hover:border-x-slate-200"
+            onmouseenter="toggle_options_dropdown()" onmouseleave="toggle_options_dropdown()">
+            <div class="px-20 py-5 bg-white cursor-pointer fold-bold h-16" id="options_drop_down_button"
+                onmousedown="toggle_options_dropdown()">
+                Go to
+            </div>
+            <div class="hidden absolute w-full text-center bg-white border-x border-b" id="options_drop_down">
+                <div class="hover:bg-slate-100 text-slate-800 p-1">
+                    <div hx-get="/about.html" hx-target="#content-target" class="cursor-pointer p-1">
+                        About
+                    </div>
+                </div>
+                <div class="hover:bg-slate-100 text-slate-800 p-1">
+                    <div hx-get="/example_ultra.html" hx-target="#content-target" class="cursor-pointer p-1">
+                        Testing Ultras
+                    </div>
+                </div>
+                <div class="hover:bg-slate-100 text-slate-800 p-1">
+                    <div hx-get="/search.html" hx-target="#content-target" class="cursor-pointer p-1">
+                        Search Athletes
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-
+    <div id="content-target" class="flex justify-center items-center">
+        <div hx-get="/about.html" hx-trigger="load" hx-swap="outerHTML">
+        </div>
+    </div>
 </body>
+<script>
+    function toggle_options_dropdown() {
+        let drop_down = document.querySelector('#options_drop_down');
+        drop_down.classList.toggle('hidden');
+    }
+</script>
 
 </html>

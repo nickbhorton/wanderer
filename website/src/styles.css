@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .ultra {
-    @apply m-1 flex justify-center border-4 border-slate-100 text-2xl font-medium w-96 h-96;
+    @apply m-1 flex justify-center border-4 border-slate-100 text-2xl font-medium w-96;
 }
 
 .marathon {

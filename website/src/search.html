@@ -1,0 +1,15 @@
+<div class="flex flex-wrap  justify-around ">
+    <div class="flex justify-center items-center h-1/2 w-full text-lg">
+        <form hx-get="/profile" hx-trigger="submit" hx-target="#content-target" class="flex flex-col p-4 rounded-lg">
+            <label class="p-1 m-1 text-center font-bold text-2xl tracking-wider">Search Athletes</label>
+            <input placeholder="First Name" name="firstname" type="text"
+                class="border border-slate-300 rounded-lg m-1 p-1 bg-white">
+            <input placeholder="Last Name" name="lastname" type="text"
+                class="border border-slate-300 rounded-lg m-1 p-1 bg-white">
+            <input placeholder="Id" name="number" type="number"
+                class=" bg-white border border-slate-300 rounded-lg m-1 p-1">
+            <button type="submit"
+                class="border border-slate-300 m-1 font-bold rounded-lg p-1 tracking-wider">Find</button>
+        </form>
+    </div>
+</div>
