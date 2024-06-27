@@ -4,5 +4,6 @@ data /home/nick/dev/wanderer/build/data/
 index src/index.html
 ext html text/html
 ext css text/css
+location get /example_ultra.html src/example_ultra.html
 location get /output.css build/output.css
 endpoint /profile get 127.0.0.1 50000

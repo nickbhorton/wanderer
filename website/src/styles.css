@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.ultra {
+    @apply m-1 flex justify-center border-4 border-slate-100 text-2xl font-medium w-96 h-96;
+}
+
+.marathon {
+    @apply border-t-8 border-t-slate-500;
+}
+.k50 {
+    @apply border-t-8 border-t-lime-500;
+}
+.m50 {
+    @apply border-t-8 border-t-red-500;
+}
+.k100 {
+    @apply border-t-8 border-t-purple-500;
+}
+.m100 {
+    @apply border-t-8 border-t-amber-500;
+}

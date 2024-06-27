@@ -6,7 +6,8 @@
 #include <variant>
 #include <vector>
 
-typedef std::optional<std::variant<int, double, std::string>> sqlite_result_t;
+typedef std::optional<std::variant<int, double, std::string>> sql_value_t;
+typedef std::vector<std::vector<sql_value_t>> sql_response_t;
 
 enum class SqliteTypes {
     Int = SQLITE_INTEGER,
@@ -16,7 +17,7 @@ enum class SqliteTypes {
     Null = SQLITE_NULL
 };
 auto operator<<(std::ostream& os, SqliteTypes t) -> std::ostream&;
-auto operator<<(std::ostream& os, std::vector<std::vector<sqlite_result_t>> res)
+auto operator<<(std::ostream& os, std::vector<std::vector<sql_value_t>> res)
     -> std::ostream&;
 
 class SqlDatabase
@@ -29,5 +30,5 @@ public:
     SqlDatabase(std::string const& path);
     ~SqlDatabase();
     auto query(std::string const& sql_query)
-        -> std::variant<std::string, std::vector<std::vector<sqlite_result_t>>>;
+        -> std::variant<std::string, std::vector<std::vector<sql_value_t>>>;
 };

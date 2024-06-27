@@ -2,7 +2,7 @@
 #include <iostream>
 
 auto SqlDatabase::query(std::string const& sql_query)
-    -> std::variant<std::string, std::vector<std::vector<sqlite_result_t>>>
+    -> std::variant<std::string, std::vector<std::vector<sql_value_t>>>
 {
     if (!db_valid) {
         return error;
@@ -13,9 +13,9 @@ auto SqlDatabase::query(std::string const& sql_query)
     if (status != SQLITE_OK) {
         return "sqlite3_prepare() error: " + std::string(sqlite3_errmsg(db));
     }
-    std::vector<std::vector<sqlite_result_t>> sql_response{};
+    sql_response_t sql_response{};
     while (true) {
-        std::vector<sqlite_result_t> sql_row{};
+        std::vector<sql_value_t> sql_row{};
         status = sqlite3_step(stmt);
         if (status == SQLITE_BUSY) {
         } else if (status == SQLITE_DONE) {
@@ -28,7 +28,7 @@ auto SqlDatabase::query(std::string const& sql_query)
                     sql_row.push_back(sqlite3_column_int(stmt, i));
                     break;
                 case SqliteTypes::Float:
-                    sql_row.push_back(sqlite3_column_int(stmt, i));
+                    sql_row.push_back(sqlite3_column_double(stmt, i));
                     break;
                 case SqliteTypes::Text: {
                     std::string str{
@@ -110,7 +110,7 @@ auto operator<<(std::ostream& os, SqliteTypes t) -> std::ostream&
     return os;
 }
 
-auto operator<<(std::ostream& os, std::vector<std::vector<sqlite_result_t>> res)
+auto operator<<(std::ostream& os, std::vector<std::vector<sql_value_t>> res)
     -> std::ostream&
 {
     for (auto const& row : res) {
