@@ -9,15 +9,31 @@
 .marathon {
     @apply border-t-8 border-t-slate-500;
 }
+
 .k50 {
     @apply border-t-8 border-t-lime-500;
 }
+
 .m50 {
     @apply border-t-8 border-t-red-500;
 }
+
 .k100 {
     @apply border-t-8 border-t-purple-500;
 }
+
 .m100 {
     @apply border-t-8 border-t-amber-500;
+}
+
+.profile_number_id {
+    @apply text-slate-300 ml-1
+}
+
+.profile_holder {
+    @apply flex flex-col items-center
+}
+
+.profile_header {
+    @apply min-w-full text-2xl h-16 border-b flex justify-around items-center
 }

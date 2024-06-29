@@ -7,6 +7,5 @@ ext css text/css
 location get /example_ultra.html src/example_ultra.html
 location get /search.html src/search.html
 location get /about.html src/about.html
-location get /profiles.html src/profiles.html
 location get /output.css build/output.css
-endpoint /profile get 127.0.0.1 50000
+endpoint /profiles get 127.0.0.1 50000

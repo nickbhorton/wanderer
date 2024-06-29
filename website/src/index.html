@@ -13,15 +13,14 @@
 <body class="bg-white text-slate-800 min-h-screen font-sans">
     <div class="flex justify-center items-center min-w-screen h-16  border-b">
         <h1 class="text-2xl font-black mx-3">Wanderer</h1>
-        <div class="relative text-normal hover:text-sky-500 border-b border-x border-x-white border-b-slate-200 hover:border-x-slate-200"
-            onmouseenter="toggle_options_dropdown()" onmouseleave="toggle_options_dropdown()">
+        <div id="options_button" class="relative text-normal border-b border-x border-x-white border-b-slate-200">
             <div class="px-20 py-5 bg-white cursor-pointer fold-bold h-16" id="options_drop_down_button"
                 onmousedown="toggle_options_dropdown()">
                 Go to
             </div>
             <div class="hidden absolute w-full text-center bg-white border-x border-b" id="options_drop_down">
                 <div class="hover:bg-slate-100 text-slate-800 p-1">
-                    <div hx-get="/profiles.html" hx-target="#content-target" class="cursor-pointer p-1">
+                    <div hx-get="/profiles" hx-target="#content-target" class="cursor-pointer p-1">
                         Profiles
                     </div>
                 </div>
@@ -46,7 +45,11 @@
 <script>
     function toggle_options_dropdown() {
         let drop_down = document.querySelector('#options_drop_down');
+        let options_button = document.querySelector('#options_button');
         drop_down.classList.toggle('hidden');
+        options_button.classList.toggle("border-x-slate-200");
+        options_button.classList.toggle("text-sky-500");
+        options_button.classList.toggle("border-x-white");
     }
 </script>
 
